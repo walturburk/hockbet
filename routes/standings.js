@@ -7,11 +7,13 @@ var msf = new MySportsFeeds("1.0", true);
 
 router.get('/', function(req, res, next) {
 
-  console.log("hej");
   msf.authenticate("walturburk", "actioncop");
 
-  var data = msf.getData('nhl', '2016-2017-regular', 'scoreboard', 'json', {'fordate':'20171224'});
-  console.log(data);
+  var data = msf.getData('nhl', '2016-2017-regular', 'overall_team_standings', 'json', {});
+
+  data.then(function(d) {
+    console.log(JSON.stringify(d));
+  });
 
   res.send('respond with a resource');
 
