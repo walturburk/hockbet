@@ -2,11 +2,11 @@ var express = require('express');
 var router = express.Router();
 var mysql = require('mysql');
 var config = require('./../config.json');
+var session = require('express-session');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
 
-  var mysql      = require('mysql');
  var connection = mysql.createConnection({
    host     : config.host,
    user     : config.user,
@@ -25,7 +25,7 @@ router.get('/', function(req, res, next) {
 
  connection.end();
 
-  res.render('index', { title: 'Express' });
+  res.render('index', { title: 'Express', username: req.session.username });
 });
 
 module.exports = router;
