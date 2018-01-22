@@ -12,10 +12,16 @@ router.get('/', function(req, res, next) {
   var data = msf.getData('nhl', '2016-2017-regular', 'overall_team_standings', 'json', {});
 
   data.then(function(d) {
+    var text = "";
     console.log(JSON.stringify(d));
+    var myArray = d.overallteamstandings.teamstandingsentry;
+    for (i = 0; i < myArray.length; i++) {
+      text += myArray[i].team.Name + "<br>";
+  }
+    res.send(text);
   });
 
-  res.send('respond with a resource');
+
 
   /*https.get('https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY', (resp) => {
     let data = '';
