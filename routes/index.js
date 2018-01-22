@@ -28,4 +28,9 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express', username: req.session.username });
 });
 
+router.post('/logout', function(req, res, next) {
+  req.session.username = false;
+  res.send("Logged out");
+});
+
 module.exports = router;

@@ -2,15 +2,19 @@
 
 {{#if username }}
 LOGGED IN AS {{this.username}}
+
+<form action="/logout" method="post">
+  <input class="mdl-button" type="submit" value="Log out" />
+</form>
+
 {{else}}
 
-{{/if}}
 <h2>Sign in</h2>
 
-<form action="/signin" method="post">
+<form action="/login" method="post">
   <fieldset>
-    <input type="text" placeholder="username" id="username" name="username" />
-    <input type="password" placeholder="password" id="password" name="password "/>
+    <input type="text" placeholder="username" id="username" name="username" required />
+    <input type="password" placeholder="password" id="password" name="password" required />
     <input class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" type="submit" value="Sign in" />
   </fieldset>
 </form>
@@ -24,3 +28,5 @@ LOGGED IN AS {{this.username}}
     <input class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" type="submit" value="Join" />
   </fieldset>
 </form>
+
+{{/if}}
