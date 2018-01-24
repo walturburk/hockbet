@@ -34,9 +34,9 @@ connection.query('SELECT password FROM hockey.users WHERE username = "'+username
 
 connection.end();
 
+res.redirect('back');
 
-
-  res.send('login:'+username+" "+password);
+  //res.send('login:'+username+" "+password);
 });
 
 module.exports = router;
