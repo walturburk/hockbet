@@ -30,7 +30,7 @@ router.get('/', function(req, res, next) {
 
 router.post('/logout', function(req, res, next) {
   req.session.username = false;
-  res.send("Logged out");
+  res.redirect('back');
 });
 
 module.exports = router;

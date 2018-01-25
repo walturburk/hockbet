@@ -21,22 +21,26 @@ console.log(username+password)
 connection.connect();
 
 connection.query('SELECT password FROM hockey.users WHERE username = "'+username+'"', function(err, rows, fields) {
+var returntext;
   if (!err) {
-    if (JSON.stringify(rows[0].password) == password) {
+    if (rows[0].password == password) {
       req.session.username=username;
+      returntext = 'username: '+username;
     } else {
-      //res.send('wrong password');
+      returntext = ("WRONG PASSWORD: <br>"+password+"<br>"+rows[0].password);
     }
   } else {
-    //res.send('wrong username');
+    returntext = ('wrong username');
   }
+  //res.send(returntext);
+  res.redirect('back');
 });
 
 connection.end();
 
-res.redirect('back');
 
-  //res.send('login:'+username+" "+password);
+
+
 });
 
 module.exports = router;
