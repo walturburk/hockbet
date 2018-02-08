@@ -2,13 +2,15 @@ var mysql = require('mysql');
 var config = require('./config.json');
 var connection;
 
-function condb() {
+function connectToDatabase() {
   if (!connection) {
-    var connection = mysql.createConnection({
+    var connection = mysql.createPool({
       host     : config.host,
       user     : config.user,
       password : config.password,
-      database : config.database
+      database : config.database,
+      connectionLimit: 10,
+      supportBigNumbers: true
     });
 
     connection.connect();
@@ -16,4 +18,4 @@ function condb() {
   return connection;
 }
 
-module.exports = condb();
+module.exports = connectToDatabase();
