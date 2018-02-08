@@ -11,7 +11,7 @@ function connectToDatabase() {
       database : config.database
     });
 
-    connection.getConnection();
+    //connection.getConnection();
   }
   return connection;
 }
