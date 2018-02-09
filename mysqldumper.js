@@ -31,14 +31,28 @@ exports.save = function() {
 
 exports.load = function() {
 
-
 fs.readFile('structure.sql', 'utf8', function(err1, data1) {
-
+  if (err1) throw err1;
     fs.readFile('data.sql', 'utf8', function(err2, data2) {
+      if (err1) throw err1;
+        database.query(data1, function(err3, rows, fields) {
+          if (err3) throw err3;
+          console.log(data1);
 
-        database.query(data1+data2, function(err3, rows, fields) {
-          console.log(data1+data2);
-        })
+          const regex = /;\nINSERT INTO(.*)VALUES/g;
+          const subst = `,`;
+
+          // The substituted value will be contained in the result variable
+          const result = data2.replace(regex, subst);
+
+          console.log('Substitution result: ', result);
+
+
+          database.query(result, function(err4, rows, fields) {
+            if(err4) throw err4;
+            console.log(data2);
+          });
+        });
     });
 });
 
