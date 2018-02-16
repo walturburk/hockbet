@@ -4,6 +4,7 @@ var db = require('../database');
 var config = require('./../config.json');
 var session = require('express-session');
 var mysqldumper = require('../mysqldumper');
+var betz = require('../betz');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -32,6 +33,12 @@ router.get('/dbsave', function(req, res, next) {
 router.get('/dbload', function(req, res, next) {
   mysqldumper.load();
   res.send("Database loaded from dump file");
+});
+
+router.get('/creategroup', function(req, res, next) {
+  var groupname = req.query.name;
+  betz.createNewGroup(groupname, 1718);
+  res.send('ok its done: '+groupname);
 });
 
 module.exports = router;
