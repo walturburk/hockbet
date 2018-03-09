@@ -1,5 +1,17 @@
 var db = require('./database.js');
+var MySportsFeeds = require("mysportsfeeds-node");
+var msf = new MySportsFeeds("1.0", true);
 var betz = {}; //make sure betz is an object with the {} or it cant take methods
+
+/*function insertQuery(table, data) {
+  for (var i=0; i<data.length; i++) {
+    data[i];
+  }
+}*/
+
+/*function getAll() {
+
+}*/
 
 function createNewGroup(groupname, season) {
   var query = "INSERT INTO `hockey`.`groups` (`name`, `season`) VALUES ('"+groupname+"', '"+season+"');";
@@ -27,7 +39,46 @@ function joinGroup(userid, groupid) {
   });
 }
 
-function getTeamsFromApi() {
+function getTeamsFromAPI() {
+
+  msf.authenticate("walturburk", "actioncop");
+
+  var data = msf.getData('nhl', '2016-2017-regular', 'overall_team_standings', 'json', {});
+
+  data.then(function(d) {
+    var sqlpart = [];
+    console.log(JSON.stringify(d));
+    var myArray = d.overallteamstandings.teamstandingsentry;
+    for (i = 0; i < myArray.length; i++) {
+      sqlpart.push("('"+myArray[i].team.ID+"', '"+myArray[i].team.City+"', '"+myArray[i].team.Name+"')");
+    }
+
+    var sqlstring = sqlpart.join(", ");
+    var query = "INSERT INTO `hockey`.`teams` (`id`, `city`, `name`) VALUES "+sqlstring+";";
+
+    db.query(query, function(err, rows, fields) {
+      console.log(query);
+    });
+    });
+
+}
+
+function populateGroup (group) {
+  var query = "SELECT * FROM hockey.teams";
+  db.query(query, function(err, rows, fields) {
+    var q=[];
+    for (var i=0; i<rows.length; i++) {
+      q.push("("+group+", "+"'1718'"+", '"+rows[i].id+"', "+"''"+")");
+    }
+    var qpart = q.join(", ");
+    var query = "INSERT INTO hockey.draft (groupid, season, team, user) VALUES "+qpart+";";
+    db.query(query, function(err, rows, fields) {
+      console.log(query);
+    });
+  });
+}
+
+function getShitFromApi() {
   /* A SHITTY EXAMPLE OF HOW TO USE CALLBACKS AND MYSQL
 
   function get_info(data, callback){
@@ -60,6 +111,8 @@ var stuff_i_want = '';
 //add methods to betz object
 betz.createNewGroup = createNewGroup;
 betz.joinGroup = joinGroup;
+betz.getTeamsFromAPI = getTeamsFromAPI;
+betz.populateGroup = populateGroup;
 
 //exports betz object
 module.exports = betz;

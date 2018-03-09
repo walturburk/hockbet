@@ -18,7 +18,7 @@ router.get('/', function(req, res, next) {
     for (i = 0; i < myArray.length; i++) {
       text += myArray[i].team.Name + "<br>";
   }
-    res.send(text);
+    res.send(myArray);
   });
 
 

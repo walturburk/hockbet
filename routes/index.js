@@ -41,4 +41,9 @@ router.get('/creategroup', function(req, res, next) {
   res.send('ok its done: '+groupname);
 });
 
+router.get('/populategroup', function(req, res, next) {
+  betz.populateGroup(1);
+  res.send('ok its done');
+});
+
 module.exports = router;
