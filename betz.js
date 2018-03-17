@@ -1,17 +1,9 @@
 var db = require('./database.js');
 var MySportsFeeds = require("mysportsfeeds-node");
 var msf = new MySportsFeeds("1.0", true);
+var http = require('http');
+
 var betz = {}; //make sure betz is an object with the {} or it cant take methods
-
-/*function insertQuery(table, data) {
-  for (var i=0; i<data.length; i++) {
-    data[i];
-  }
-}*/
-
-/*function getAll() {
-
-}*/
 
 function createNewGroup(groupname, season) {
   var query = "INSERT INTO `hockey`.`groups` (`name`, `season`) VALUES ('"+groupname+"', '"+season+"');";
@@ -63,22 +55,106 @@ function getTeamsFromAPI() {
 
 }
 
-function populateGroup (group) {
-  var query = "SELECT * FROM hockey.teams";
+function createDraftOrder (group) {
+  var users = [];
+  var teams = [];
+
+  var query = "SELECT * FROM hockey.membership WHERE groupid = '"+group+"'";
   db.query(query, function(err, rows, fields) {
-    var q=[];
     for (var i=0; i<rows.length; i++) {
-      q.push("("+group+", "+"'1718'"+", '"+rows[i].id+"', "+"''"+")");
+      users.push(rows[i].userid);
     }
-    var qpart = q.join(", ");
-    var query = "INSERT INTO hockey.draft (groupid, season, team, user) VALUES "+qpart+";";
+
+    var query = "SELECT * FROM hockey.teams"
     db.query(query, function(err, rows, fields) {
-      console.log(query);
+      for (var i=0; i<rows.length; i++) {
+        teams.push(rows[i].id);
+      }
+      var maxpicks = teams.length%users.length;
+
+      var q=[];
+      var theorder = 1;
+      for (var i=0; i<users.length; i++) {
+        for (var j=0; j<maxpicks; j++) {
+          q.push("("+group+", 1718, null, "+rows[i].id+", "+(theorder+j)+")");
+        }
+      }
+      var qpart = q.join(", ");
+      var query = "INSERT INTO hockey.draft (groupid, season, team, user, order) VALUES "+qpart+";";
+      db.query(query, function(err, rows, fields) {
+        console.log(query);
+      });
+
     });
+  });
+
+
+}
+
+function selectTeam(groupid, userid, team, ordernr) {
+  var query = "UPDATE hockey.draft SET team='"+team+"' WHERE order="+ordernr+" and season='1718' and groupid="+groupid+" and user = "+userid+";";
+  db.query(query, function(err, rows, fields) {
+    console.log(query);
   });
 }
 
+
+
+//add methods to betz object
+betz.createNewGroup = createNewGroup;
+betz.joinGroup = joinGroup;
+betz.getTeamsFromAPI = getTeamsFromAPI;
+betz.createDraftOrder = createDraftOrder;
+betz.getShitFromApi = getShitFromApi;
+
+//exports betz object
+module.exports = betz;
+
+
+
+
+//TEST SHIT BELOW
+
+function getJSON(options, cb) {
+  http.request(options, function(res) {
+    var body = "";
+
+    res.on('data', function(chunk) {
+      body += chunk;
+    });
+
+    res.on('end', function() {
+      var result = JSON.parse(body);
+      cb(null, result);
+    });
+
+    res.on('error', cb);
+
+  })
+  .on('error', cb)
+  .end();
+}
+
+
 function getShitFromApi() {
+
+  var options = {
+    host: 'jsonplaceholder.typicode.com',
+    port: 80,
+    path: '/posts/1',
+    method: 'GET'
+  };
+
+  getJSON(options, function(err, result) {
+    if (err) {
+      return console.log('Error while trying to get: ', err);
+    }
+    console.log(result);
+  });
+
+}
+
+function getShitFromMysql() {
   /* A SHITTY EXAMPLE OF HOW TO USE CALLBACKS AND MYSQL
 
   function get_info(data, callback){
@@ -107,12 +183,3 @@ var stuff_i_want = '';
     //rest of your code goes in here
  });*/
 }
-
-//add methods to betz object
-betz.createNewGroup = createNewGroup;
-betz.joinGroup = joinGroup;
-betz.getTeamsFromAPI = getTeamsFromAPI;
-betz.populateGroup = populateGroup;
-
-//exports betz object
-module.exports = betz;
