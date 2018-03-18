@@ -27,7 +27,7 @@ var returntext;
   res.redirect('back');
 });
 
-connection.end();
+//connection.end();
 
 
 

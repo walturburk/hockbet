@@ -1,0 +1,9 @@
+<h1>Create group</h1>
+
+<form action="/creategroup/send" method="post" id="creategroup">
+  <input type="text" placeholder="Group name" id="groupname" name="groupname" required/>
+  <input type="date" id="draftstart" name="draftstart" required/>
+  <input type="number" id="timer" name="timer" min="1" step="1" value="1"/>
+  <input type="number" id="picks" name="picks" min="1" step="1" max="15" value="1"/>
+  <input type="submit" value="Send" />
+</form>

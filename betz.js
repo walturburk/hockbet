@@ -5,8 +5,10 @@ var http = require('http');
 
 var betz = {}; //make sure betz is an object with the {} or it cant take methods
 
-function createNewGroup(groupname, season) {
-  var query = "INSERT INTO `hockey`.`groups` (`name`, `season`) VALUES ('"+groupname+"', '"+season+"');";
+function createNewGroup(groupname, startdate, timer, picks) {
+
+  var query = "INSERT INTO `hockey`.`groups` (`groupid`, `name`, `season`, `startdate`, `timer`, `picks`) VALUES (null, '"+groupname+"', 1718, '"+startdate+"', "+timer+", "+picks+");";
+console.log("QUERY: "+query);
   db.query(query, function(err, rows, fields) {
      if (!err) {
        console.log("Group '"+groupname+"' created");
@@ -19,7 +21,8 @@ function createNewGroup(groupname, season) {
 }
 
 function joinGroup(userid, groupid) {
-  var query = "INSERT INTO `hockey`.`membership` (`userid`, `groupid`) VALUES ('"+userid+"', '"+groupid+"');";
+  var query = "INSERT INTO `hockey`.`membership` (`userid`, `groupid`) VALUES ('"+userid+"', "+groupid+");";
+  console.log(query);
   db.query(query, function(err, rows, fields) {
     if (!err) {
       console.log("user: "+userid+" group: "+groupid);
