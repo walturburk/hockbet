@@ -1,19 +1,6 @@
-<h1>Hockey bets 2k18</h1>
-
-{{#if username }}
-LOGGED IN AS {{this.username}}
-
-<form action="/logout" method="post">
-  <input class="mdl-button" type="submit" value="Log out" />
-</form>
-
-<a href="/creategroup">Create group</a>
-
-{{else}}
-
 <h2>Sign in</h2>
 
-<form action="/login" method="post">
+<form action="" method="post">
   <fieldset>
     <input type="text" placeholder="username" id="username" name="username" required />
     <input type="password" placeholder="password" id="password" name="password" required />
@@ -23,12 +10,10 @@ LOGGED IN AS {{this.username}}
 
 <h2>Sign up</h2>
 
-<form action="/register" method="post">
+<form action="" method="post">
   <fieldset>
     <input type="text" placeholder="username" id="username" name="username"/>
     <input type="password" placeholder="password" id="password" name="password" />
     <input class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" type="submit" value="Join" />
   </fieldset>
 </form>
-
-{{/if}}

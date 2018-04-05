@@ -1,6 +1,13 @@
 <h1>Invite to {{this.groupname}}</h1>
 
-<form action="/creategroup/invite/send" method="post">
+<form action="" method="post">
+  <input type="hidden" name="group" id="group" value="{{this.groupname}}"/>
   <input type="email" name="email" id="email" placeholder="some@email.com" />
   <input type="submit" name="submit" id="submit" value="Send" />
 </form>
+
+{{#if invited }}
+
+<span style="color:green">Invited {{this.invited}}</span>
+
+{{/if}}

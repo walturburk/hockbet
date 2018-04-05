@@ -5,6 +5,21 @@ var http = require('http');
 
 var betz = {}; //make sure betz is an object with the {} or it cant take methods
 
+function registerUser(username, password, req, callback) {
+
+  var sess;
+  db.query("INSERT INTO `hockey`.`users` (`username`, `password`) VALUES ('"+username+"', '"+password+"');", function(err, rows, fields) {
+    if (!err) {
+      console.log("SUCCESS:"+rows);
+      sess=req.session;
+      sess.username=req.body.username;
+      callback(sess);
+    } else {
+      console.log("Error performing query"+err);
+    }
+  });
+};
+
 function createNewGroup(groupname, startdate, timer, picks) {
 
   var query = "INSERT INTO `hockey`.`groups` (`groupid`, `name`, `season`, `startdate`, `timer`, `picks`) VALUES (null, '"+groupname+"', 1718, '"+startdate+"', "+timer+", "+picks+");";
@@ -109,6 +124,7 @@ betz.joinGroup = joinGroup;
 betz.getTeamsFromAPI = getTeamsFromAPI;
 betz.createDraftOrder = createDraftOrder;
 betz.getShitFromApi = getShitFromApi;
+betz.registerUser = registerUser;
 
 //exports betz object
 module.exports = betz;

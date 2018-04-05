@@ -8,14 +8,30 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/:groupid', function(req, res, next) {
+
   var user = req.session.username
   var group = req.params.groupid;
+
   if (user) {
+
     betz.joinGroup(user, group);
+    res.send('USER :'+user+" JOINED GROUP: "+group);
+
   } else {
-    user = "";
+
+    res.redirect('/');
+
   }
-  res.send('USER :'+user+" JOINED GROUP: "+group);
+
+});
+
+router.post('/:groupid', function(req, res, next) {
+  var username = req.body.username;
+  var password = md5(req.body.password);
+
+  betz.registerUser(username, password, req, function(sess) {
+    res.send('REGISTERED USER '+sess.username+' AND LOGGED IN');
+  });
 });
 
 module.exports = router;
