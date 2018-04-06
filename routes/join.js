@@ -25,13 +25,4 @@ router.get('/:groupid', function(req, res, next) {
 
 });
 
-router.post('/:groupid', function(req, res, next) {
-  var username = req.body.username;
-  var password = md5(req.body.password);
-
-  betz.registerUser(username, password, req, function(sess) {
-    res.send('REGISTERED USER '+sess.username+' AND LOGGED IN');
-  });
-});
-
 module.exports = router;

@@ -88,18 +88,28 @@ function createDraftOrder (group) {
       for (var i=0; i<rows.length; i++) {
         teams.push(rows[i].id);
       }
+      console.log(teams.length+" + "+users.length+" = "+teams.length%users.length);
       var maxpicks = teams.length%users.length;
+
+      maxpicks = (teams.length-maxpicks)/users.length;
 
       var q=[];
       var theorder = 1;
+      console.log("USERLENGTH:"+users.length);
+      console.log(maxpicks);
+      for (var j=0; j<maxpicks; j++) {
       for (var i=0; i<users.length; i++) {
-        for (var j=0; j<maxpicks; j++) {
-          q.push("("+group+", 1718, null, "+rows[i].id+", "+(theorder+j)+")");
+
+          q.push("('"+group+"', '1718', null, '"+rows[i].id+"', '"+(theorder++)+"')");
         }
       }
       var qpart = q.join(", ");
-      var query = "INSERT INTO hockey.draft (groupid, season, team, user, order) VALUES "+qpart+";";
+      var query = "INSERT INTO hockey.draft (`groupid`, `season`, `team`, `user`, `order`) VALUES "+qpart+";";
       db.query(query, function(err, rows, fields) {
+        if (err) {
+          console.log(query);
+          console.log(err);
+        }
         console.log(query);
       });
 

@@ -17,6 +17,12 @@ router.post('/logout', function(req, res, next) {
   res.redirect('back');
 });
 
+router.get('/draft/:group', function(req, res, next) {
+  var group = req.params.group;
+  betz.createDraftOrder(group);
+  res.redirect('back');
+});
+
 
 
 module.exports = router;
