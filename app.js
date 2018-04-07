@@ -14,6 +14,7 @@ var login = require('./routes/login');
 var creategroup = require('./routes/creategroup');
 var invite = require('./routes/invite');
 var joine = require('./routes/join');
+var draft = require('./routes/draft');
 
 var app = express();
 
@@ -38,7 +39,7 @@ app.use('/login', login);
 app.use('/creategroup', creategroup);
 app.use('/invite', invite);
 app.use('/join', joine);
-
+app.use('/draft', draft);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

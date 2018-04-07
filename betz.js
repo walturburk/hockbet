@@ -127,6 +127,18 @@ function selectTeam(groupid, userid, team, ordernr) {
 }
 
 
+function printDraft(group, callback) {
+  var season = "1718";
+  var query = "SELECT * FROM hockey.draft WHERE groupid = '"+group+"' && season = '"+season+"' ORDER BY `order` ASC";
+  db.query(query, function(err, rows, fields) {
+    //for (var i=0; i<rows.length; i++) {}
+
+    callback(rows);
+
+  });
+
+}
+
 
 //add methods to betz object
 betz.createNewGroup = createNewGroup;
@@ -135,6 +147,8 @@ betz.getTeamsFromAPI = getTeamsFromAPI;
 betz.createDraftOrder = createDraftOrder;
 betz.getShitFromApi = getShitFromApi;
 betz.registerUser = registerUser;
+betz.selectTeam = selectTeam;
+betz.printDraft = printDraft;
 
 //exports betz object
 module.exports = betz;
